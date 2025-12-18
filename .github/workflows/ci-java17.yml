@@ -8,6 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,6 +25,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ghcr.io/andylamothe/tp4maintenance/todo-api:java17 .
-          docker push ghcr.io/andylamothe/tp4maintenance/todo-api:java17
-
+          docker build -t ghcr.io/andylamothe/todo-api:java17 .
+          docker push ghcr.io/andylamothe/todo-api:java17
