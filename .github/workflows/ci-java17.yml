@@ -20,6 +20,6 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-docker build -t ghcr.io/${{ github.repository_owner | toLower }}/tp4maintenance/todo-api:java17 .
-docker push ghcr.io/${{ github.repository_owner | toLower }}/tp4maintenance/todo-api:java17
+	   docker build -t ghcr.io/${{ github.repository_owner | toLower }}/tp4maintenance/todo-api:java17 .
+	   docker push ghcr.io/${{ github.repository_owner | toLower }}/tp4maintenance/todo-api:java17
 
