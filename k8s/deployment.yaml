@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-app
+  template:
+    metadata:
+      labels:
+        app: todo-app
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/andylamothe/tp4maintenance/todo-api:java17 # Remplace avec ton nom et repo
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret-1  # Nom du secret
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: data-storage
+              mountPath: /data  # Chemin de stockage dans le conteneur
+      volumes:
+        - name: data-storage
+          persistentVolumeClaim:
+            claimName: app-pvc  # Nom du PVC
