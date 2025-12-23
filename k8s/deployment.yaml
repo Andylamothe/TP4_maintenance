@@ -16,7 +16,8 @@ spec:
         - name: ghcr-secret  # Secret pour l'accès à l'image privée
       containers:
         - name: api
-          image: ghcr.io/andylamothe/tp4maintenance/todo-api:java17
+          image: ghcr.io/andylamothe/todo-api:java17
+
           ports:
             - containerPort: 8080
           resources:
