@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: todo-app
 spec:
-  replicas: 2
+  replicas: 2  # Limite les réplicas à 2 (un pour l'app, un pour la DB)
   selector:
     matchLabels:
       app: todo-app
@@ -12,21 +12,28 @@ spec:
       labels:
         app: todo-app
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret  # Secret pour l'accès à l'image privée
       containers:
         - name: api
-          image: ghcr.io/andylamothe/tp4maintenance/todo-api:java17 # Remplace avec ton nom et repo
+          image: ghcr.io/andylamothe/tp4maintenance/todo-api:java17
           ports:
             - containerPort: 8080
-          env:
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret-1  # Nom du secret
-                  key: DB_PASSWORD
-          volumeMounts:
-            - name: data-storage
-              mountPath: /data  # Chemin de stockage dans le conteneur
-      volumes:
-        - name: data-storage
-          persistentVolumeClaim:
-            claimName: app-pvc  # Nom du PVC
+          resources:
+            requests:
+              cpu: "100m"         # Moins de 400m CPU pour l'application
+              memory: "128Mi"     # Moins de 400Mi pour l'application
+            limits:
+              cpu: "200m"         # Maximum de 400m CPU
+              memory: "256Mi"     # Maximum de 400Mi mémoire
+        - name: mariadb
+          image: mariadb:latest
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              cpu: "100m"         # Moins de 200m CPU pour la base de données
+              memory: "100Mi"     # Moins de 200Mi pour la base de données
+            limits:
+              cpu: "100m"         # Maximum de 200m CPU pour la base de données
+              memory: "100Mi"     # Maximum de 200Mi mémoire pour la base de données
